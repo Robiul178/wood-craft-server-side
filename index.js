@@ -34,18 +34,23 @@ async function run() {
         const userCollection = dataBase.collection("users");
         const itemsCollection = dataBase.collection('items');
 
+
+        app.get('/items', async (req, res) => {
+            const cursor = itemsCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+
         app.post('/items', async (req, res) => {
             const newItem = req.body;
-            console.log(newItem);
             const result = await itemsCollection.insertOne(newItem);
             res.send(result)
 
         })
 
-
         app.post('/users', async (req, res) => {
             const newUser = req.body;
-            console.log(newUser)
             const result = await userCollection.insertOne(newUser);
             res.send(result);
         })
