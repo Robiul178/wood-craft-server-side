@@ -28,8 +28,20 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
+        // const userCollection = client.db("wood-wonders").collection("users");        
+        const dataBase = client.db("wood-wonders")
 
-        const userCollection = client.db("wood-wonders").collection("users");
+        const userCollection = dataBase.collection("users");
+        const itemsCollection = dataBase.collection('items');
+
+        app.post('/items', async (req, res) => {
+            const newItem = req.body;
+            console.log(newItem);
+            const result = await itemsCollection.insertOne(newItem);
+            res.send(result)
+
+        })
+
 
         app.post('/users', async (req, res) => {
             const newUser = req.body;
