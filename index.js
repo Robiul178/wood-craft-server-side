@@ -34,6 +34,13 @@ async function run() {
         const itemsCollection = dataBase.collection('items');
 
 
+        app.get('/items/:email', async (req, res) => {
+            const userEmail = req.params.userEmail;
+            console.log(userEmail);
+            const result = await itemsCollection.findOne(i => i.email === userEmail);
+            res.send(result)
+        })
+
         app.get('/items', async (req, res) => {
             const cursor = itemsCollection.find();
             const result = await cursor.toArray();
