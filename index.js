@@ -12,7 +12,7 @@ app.use(express.json())
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pg5idq6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
-console.log(uri)
+// console.log(uri)
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -33,13 +33,10 @@ async function run() {
         const userCollection = dataBase.collection("users");
         const itemsCollection = dataBase.collection('items');
 
-
-        app.get('/items/:email', async (req, res) => {
-            const userEmail = req.params.userEmail;
-            console.log(userEmail);
-            const result = await itemsCollection.findOne(i => i.email === userEmail);
+        app.get('/myitem/:email', async (req, res) => {
+            const result = await itemsCollection.find({ email: req.params.email }).toArray();
             res.send(result)
-        })
+        });
 
         app.get('/items', async (req, res) => {
             const cursor = itemsCollection.find();
