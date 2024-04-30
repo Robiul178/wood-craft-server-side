@@ -44,11 +44,42 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/items/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await itemsCollection.findOne(query);
+            res.send(result);
+        })
+
         app.delete('/items/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await itemsCollection.deleteOne(query);
             res.send(result);
+        })
+
+        app.put('/items/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true };
+            const updateItem = req.body;
+            const item = {
+                $set: {
+                    name: updateItem.itemNAme,
+                    subcategory: updateItem.subcategory,
+                    photo: updateItem.photo,
+                    description: updateItem.description,
+                    price: updateItem.price,
+                    rating: updateItem.rating,
+                    time: updateItem.time,
+                    customization: updateItem.customization,
+                    stockStatus: updateItem.stockStatus
+
+                }
+            }
+
+            const result = await itemsCollection.updateOne(filter, item, options);
+            res.send(result)
         })
 
         app.post('/items', async (req, res) => {
